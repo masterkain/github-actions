@@ -54,25 +54,25 @@ REPO=$(basename "${GITHUB_REPOSITORY}")
 main() {
     echo "GitHub: using ${USERNAME}:${FLUX_GITHUB_TOKEN} ${AUTH_HEADER} ${API_HEADER}"
     # Don't proceed if the base branch is not BASE_BRANCH
-    # PULL_REQUEST_NUMBER=$(curl -XGET -fsSL \
-    #                            -H "${AUTH_HEADER}" \
-    #                            -H "${API_HEADER}" \
-    #                            "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-    #                            | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .number')
-    # PULL_REQUEST_BASE_BRANCH=$(curl -XGET -fsSL \
-    #                                 -H "${AUTH_HEADER}" \
-    #                                 -H "${API_HEADER}" \
-    #                                 "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-    #                                 | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .base | .ref')
-    # if [[ "$PULL_REQUEST_BASE_BRANCH" != "$BASE_BRANCH" ]]; then
-    #     echo "Base branch is not $BASE_BRANCH. Found $PULL_REQUEST_BASE_BRANCH. Exiting."
-    #     exit 0
-    # fi
+    PULL_REQUEST_NUMBER=$(curl -XGET -fsSL \
+                               -H "${AUTH_HEADER}" \
+                               -H "${API_HEADER}" \
+                               "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
+                               | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .number')
+    PULL_REQUEST_BASE_BRANCH=$(curl -XGET -fsSL \
+                                    -H "${AUTH_HEADER}" \
+                                    -H "${API_HEADER}" \
+                                    "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
+                                    | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .base | .ref')
+    if [[ "$PULL_REQUEST_BASE_BRANCH" != "$BASE_BRANCH" ]]; then
+        echo "Base branch is not $BASE_BRANCH. Found $PULL_REQUEST_BASE_BRANCH. Exiting."
+        exit 0
+    fi
 
     # Clone the Flux config repo
     if [[ ! -d "$FLUX_REPO" ]]; then
         echo "Cloning https://${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}.git"
-        git clone -b "${FLUX_BRANCH}" https://"${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}"
+        git clone -b "${FLUX_BRANCH}" https://"${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}.git"
     fi
 
     # Get the PR state and determine what to do
