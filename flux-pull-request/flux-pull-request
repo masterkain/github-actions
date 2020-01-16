@@ -148,7 +148,8 @@ deploy() {
         curl -XPOST -fsSL \
              -H "${AUTH_HEADER}" \
              -H "${API_HEADER}" \
-             "${URI}/repos/${ORG}/${REPO}/issues/${PULL_REQUEST_NUMBER}/comments?body=${PULL_REQUEST_BODY}"
+             "${URI}/repos/${ORG}/${REPO}/issues/${PULL_REQUEST_NUMBER}/comments -d '{"body": "${PULL_REQUEST_BODY}"}'
+
     fi
 }
 
