@@ -52,6 +52,7 @@ PULL_REQUEST_BRANCH=$(basename "${GITHUB_REF}" | tr '[:upper:]' '[:lower:]' | se
 REPO=$(basename "${GITHUB_REPOSITORY}")
 
 main() {
+    echo "GitHub: using ${USERNAME}:${FLUX_GITHUB_TOKEN} ${AUTH_HEADER} ${API_HEADER}"
     # Don't proceed if the base branch is not BASE_BRANCH
     # PULL_REQUEST_NUMBER=$(curl -XGET -fsSL \
     #                            -H "${AUTH_HEADER}" \
@@ -70,7 +71,7 @@ main() {
 
     # Clone the Flux config repo
     if [[ ! -d "$FLUX_REPO" ]]; then
-        echo "Cloning https://${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}"
+        echo "Cloning https://${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}.git"
         git clone -b "${FLUX_BRANCH}" https://"${USERNAME}:${FLUX_GITHUB_TOKEN}@github.com/${ORG}/${FLUX_REPO}"
     fi
 
