@@ -64,7 +64,7 @@ main() {
                                     "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
                                     | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .base | .ref')
     if [[ "$PULL_REQUEST_BASE_BRANCH" != "$BASE_BRANCH" ]]; then
-        echo "Base branch is not $BASE_BRANCH. Exiting."
+        echo "Base branch is not $BASE_BRANCH. Found $PULL_REQUEST_BASE_BRANCH. Exiting."
         exit 0
     fi
 
