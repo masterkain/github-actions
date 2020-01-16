@@ -125,7 +125,7 @@ deploy() {
     # Update the basic HelmRelease fields
     echo "Updating HelmRelease fields to ${BRANCH_SERVICE_NAME}"
     yq w "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml" metadata.name "${BRANCH_SERVICE_NAME}" | sponge "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml"
-    yq w "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml" metadata.annotations.[flux.weave.works/tag.chart-image] "${PULL_REQUEST_BRANCH_GLOB}" | sponge "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml"
+    yq w "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml" metadata.annotations.[fluxcd.io/tag.chart-image] "${PULL_REQUEST_BRANCH_GLOB}" | sponge "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml"
     yq w "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml" spec.releaseName "${BRANCH_SERVICE_NAME}" | sponge "${FLUX_REPO}/${FLUX_PATH}/${FLUX_SERVICE}-${PULL_REQUEST_BRANCH}.yaml"
 
     # Add ADDITIONAL_CONFIG fields to the HelmRelease, and if ADDITIONAL_CONFIG_SUBSTITUTION is set, sub FLUX_SERVICE for BRANCH_SERVICE_NAME
