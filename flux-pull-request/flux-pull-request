@@ -58,12 +58,12 @@ main() {
                                -H "${AUTH_HEADER}" \
                                -H "${API_HEADER}" \
                                "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                               | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .number')
+                               | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .number')
     PULL_REQUEST_BASE_BRANCH=$(curl -XGET -fsSL \
                                     -H "${AUTH_HEADER}" \
                                     -H "${API_HEADER}" \
                                     "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                                    | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .base | .ref')
+                                    | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .base | .ref')
     if [[ "$PULL_REQUEST_BASE_BRANCH" != "$BASE_BRANCH" ]]; then
         echo "Base branch is not $BASE_BRANCH. Found $PULL_REQUEST_BASE_BRANCH. Exiting."
         exit 0
@@ -80,7 +80,7 @@ main() {
                               -H "${AUTH_HEADER}" \
                               -H "${API_HEADER}" \
                               "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                              | jq -r '.[] | select(.head.sha=="'${GITHUB_SHA}'") | .state')
+                              | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .state')
 
     if [[ ${PULL_REQUEST_STATE} == "open" ]]; then
         echo "Pull request is open. Running deployment."
@@ -91,7 +91,7 @@ main() {
         GIT_COMMIT_MESSAGE="Remove pull request HelmRelease for ${PULL_REQUEST_BRANCH} branch"
         cleanup
     else
-        echo "Unknown pull request state for ${GITHUB_SHA}: ${PULL_REQUEST_STATE}. Exiting."
+        echo "Unknown pull request state for ${CURRENT_SHA}: ${PULL_REQUEST_STATE}. Exiting."
         exit 1
     fi
 
