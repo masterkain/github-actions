@@ -58,12 +58,12 @@ main() {
                                -H "${AUTH_HEADER}" \
                                -H "${API_HEADER}" \
                                "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                               | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .number')
+                               | jq -r '.[0] | select(.head.sha=="'${CURRENT_SHA}'") | .number' | head -1)
     PULL_REQUEST_BASE_BRANCH=$(curl -XGET -fsSL \
                                     -H "${AUTH_HEADER}" \
                                     -H "${API_HEADER}" \
                                     "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                                    | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .base | .ref')
+                                    | jq -r '.[0] | select(.head.sha=="'${CURRENT_SHA}'") | .base | .ref' | head -1)
     if [[ "$PULL_REQUEST_BASE_BRANCH" != "$BASE_BRANCH" ]]; then
         echo "Base branch is not $BASE_BRANCH. Found $PULL_REQUEST_BASE_BRANCH. Exiting."
         exit 0
@@ -80,7 +80,7 @@ main() {
                               -H "${AUTH_HEADER}" \
                               -H "${API_HEADER}" \
                               "${URI}/repos/${ORG}/${REPO}/pulls?state=all" \
-                              | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .state')
+                              | jq -r '.[] | select(.head.sha=="'${CURRENT_SHA}'") | .state' | head -1)
 
     if [[ ${PULL_REQUEST_STATE} == "open" ]]; then
         echo "Pull request is open. Running deployment."
