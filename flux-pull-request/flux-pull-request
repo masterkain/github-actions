@@ -48,7 +48,7 @@ elif [[ -z "$BASE_BRANCH" ]]; then
     exit 1
 fi
 
-PULL_REQUEST_BRANCH=$(basename "${CURRENT_REF}" | tr '[:upper:]' '[:lower:]' | cut -c1-14 | sed 's/_/-/g')
+PULL_REQUEST_BRANCH=$(basename "${CURRENT_REF}" | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')
 REPO=$(basename "${GITHUB_REPOSITORY}")
 
 main() {
